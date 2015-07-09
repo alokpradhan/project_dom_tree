@@ -2,14 +2,24 @@ def parse_tag(tag)
 
   regex = /<(.*?)>/					#matches entrire string within <>
   whole_line = tag.scan(regex)
+  whole_line = whole_line.join
   html = Hash.new
   #words = whole_line.each.scan(/\w+.*?/)
   tag = []
-  whole_line.each do |section|
-  	tag << (/\w+.*?/).match(section)
+  
+  portions = (/^\s*([a-z]*)(.*)/i).match(whole_line)
+
+  html[:tag_name] = portions[1]
+  p portions[2]
+  hash_keys = portions[2].scan(/\s*(\w*?)\s*=/i)
+  vals = portions[2].scan(/((\'|\").*?(\'|\"))/)
+
+  hash_keys.each_with_index do |key, i|
+
+    html[key.join.to_sym] = vals[i][0].split
+
   end
-  p whole_line
-  p words
+  p html
 end
 
 
@@ -26,6 +36,8 @@ Regex needed
 Regex tried:
 
 1. /\w+.*?/   matches all words in a string
+2. /\sclass*?\W/ matches class
+3. /\s*(\w*?)\s*=/i    generic match for class, id, name ...
 
 
 =end
