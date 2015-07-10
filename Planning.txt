@@ -29,7 +29,7 @@ hit a new opening tag, then
 2. new_node.parent = stack[-1]
 3. stack[-1].children << new_node
 4. stack[-1].text << current text
-5. tag_stack << new tag
+5. tag_stack << new tag node
 
 
 ...
