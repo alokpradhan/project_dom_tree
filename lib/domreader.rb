@@ -8,7 +8,7 @@ class DomReader
 
 	def initialize
 		@tree = DomTree.new("root")
-		@stack = [@root]
+		# @stack = [@root]
 	end
 
 	def readfile
@@ -35,7 +35,7 @@ class DomReader
 	end
 
 	def parse_text_in_line(line)
-		unless line.include?("<")
+		if !line.include?("<")
 			line
 		else
 			result = line.match(/(?<=\>).*(?=(\<))/)    #checks on a line between >  and <
@@ -54,10 +54,12 @@ class DomReader
 			tag_class = parse_class(line) || nil
 			tag_id =  parse_id(line) || nil
 			text_in_line << parse_text_in_line(line) || ""
-			if tag_name.include?("/") == false
+			if !tag_name.nil? && !tag_name.include?("/")
 				@tree.opening_tag(tag_name, text_in_line[-1], tag_class, tag_id)
 			elsif check_if_closing_tag(line)
 				@tree.closing_tag(tag_name, text_in_line.pop)
+			else
+				@tree.insert_text(text_in_line.pop)
 			end
 		end
 	end
