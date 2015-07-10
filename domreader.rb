@@ -1,53 +1,87 @@
+require 'pry'
+
+DomTree = Struct.new(:name,:text,:classes,:children, :parent)
+
 class DomReader
+	attr_reader :text, :root, :stack, :tree
 
-	def readfile
-		text = []
-		file_lines = File.readlines("test.html")
-	 	file_lines.each do |lines|
-	 		text << parse_tag(lines)
-	 	end
- 		p text
- 		#text.each {|line| puts text}
- 	end
-
-	def parse_tag(tag)
-		regex = /<(.*?)>/					#matches entrire string within <>
-		whole_line = tag.scan(regex)
-		whole_line = whole_line.join
-		html = Hash.new
-		  #words = whole_line.each.scan(/\w+.*?/)
-		tag = []
-		portions = (/^\s*([a-z]*)(.*)/i).match(whole_line)
-		html[:tag_name] = portions[1]
-		p portions[2]
-		hash_keys = portions[2].scan(/\s*(\w*?)\s*=/i)
-		vals = portions[2].scan(/((\'|\").*?(\'|\"))/)
-
-		hash_keys.each_with_index do |key, i|
-		  	html[key.join.to_sym] = vals[i][0].split
-		end
-		html
+	def initialize
+		@root = DomTree.new()
+		@tree = []
+		@stack = [@root]
 	end
 
-	def parse_text(line)
+	def readfile
+		@text = []
+		file_lines = File.readlines("test.html")
+	 	file_lines.each do |lines|
+	 		@text << lines.strip
+	 	end
+ 	end
+
+	def parse_tag_name(line)
+		result = line.match(/(?<=\<).*?(?=(\>|\s))/)
+		result[0] unless result.nil?
+	end
+
+	def parse_class(line)
+		result = line.match(/(?<=(class="|class=')).*?(?=(\"|\'))/)
+		result[0] unless result.nil?
+	end
+
+	def parse_id(line)
+		result = line.match(/(?<=(id="|id=')).*?(?=(\"|\'))/)
+		result[0] unless result.nil?
+	end
+
+	def parse_text_in_line(line)
 		unless line.include?("<")
-			text_in_line = line
+			line
 		else
-			regex = /(?<=\>).*(?=(\<))/  #checks on a line between >  and <
-			text_in_line = line.match(regex)
-			text_in_line = text_in_line[0]
+			result = line.match(/(?<=\>).*(?=(\<))/)    #checks on a line between >  and <
+			result[0] unless result.nil?
 		end
-		text_in_line
+	end
+
+	def check_if_closing_tag(line)
+		line.match(/<\//) != nil
+	end
+
+	def create_nodes
+		@text.each do |line|
+		#binding.pry
+			tag_name = parse_tag_name(line) || nil
+			tag_class = parse_class(line) || parse_id(line) || nil
+			text_in_line = parse_text_in_line(line) || nil
+			create_tree(line, tag_name, tag_class, text_in_line)
+			# p [tag_name]
+		end
+	end
+
+	def create_tree(line, tag_name, tag_class, text_in_line)
+		if check_if_closing_tag(line)
+			node_to_add = @stack.pop
+			# @node_to_add.parent = @tree.last.children
+			# @root.children = node_to_add
+			# node_to_add.parent = @root
+			@tree << node_to_add
+			# if @tree.length > 1
+			# 	@tree[-2] = node_to_add.parent
+			# 	node_to_add = @tree[-2].children
+			# end
+			# node_to_add.text = text_in_line  #text in line needs to be assigned to prev
+		elsif tag_name == nil
+			@stack[-1].text = text_in_line
+		else
+			p tag_name
+			new_node = DomTree.new(tag_name, nil, tag_class, nil, stack[-1])
+		end
 	end
 end
 
-	# - name
-	# - text
-	# - classes
-	# - id
-	# - children
-	# - parent
-
-	# line has an opening tag, or closing tag, or text, or mixing all
-	# tell if a line is an opening tag or closing ^<head
-	# we need ID's and classes to check if it unique
+a = DomReader.new
+a.readfile
+a.create_nodes
+# p a.root
+# p a.text
+p a.stack

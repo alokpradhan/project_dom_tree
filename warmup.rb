@@ -39,6 +39,8 @@ Regex tried:
 2. /\sclass*?\W/ matches class
 3. /\s*(\w*?)\s*=/i    generic match for class, id, name ...
 4. (?<=(\"|\')).*?(?=(\"|\'))   look ahead and back to avoid quotes, but takes everything between quotes
-
+5.
+Donald Kelsey	6:42 PM
+<[^<>]*>[^<>]*<\/[^<>]*>
 
 =end
