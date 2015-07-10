@@ -14,9 +14,9 @@ class TreeSearcher
 
   def search_ancestors(node, attribute, keyword)
     search_result = []
-    until node.parent
-       search_result << node.parent if is_match?(node, attribute, keyword)
+    while node.parent
        node = node.parent
+       search_result << node if is_match?(node, attribute, keyword)
     end
     search_result
   end
@@ -40,7 +40,7 @@ class TreeSearcher
 
   def is_match?(node, attribute, keyword)
     if attribute == :classes
-      return node[attribute].include?(keyword)
+      return node[attribute].include?(keyword) unless node[attribute].nil?
     else
       return node[attribute] == keyword
     end

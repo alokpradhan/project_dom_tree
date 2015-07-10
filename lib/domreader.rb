@@ -5,7 +5,7 @@ class DomReader
 	attr_reader :text, :root, :stack, :tree
 
 	def initialize
-		@tree = DomTree.new("root")
+		@tree = DomTree.new("doctype")
 	end
 
 	def readfile
