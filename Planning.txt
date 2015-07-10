@@ -1,0 +1,18 @@
+Planning
+
+1. Read in a file containing an HTML page and parse out individual nodes
+	- Every tree node will have
+	- name
+	- text
+	- classes
+	- id
+	- children
+	- parent
+2. Output statistics for a particular node
+3. Search and return characteristics of a node on the tree
+
+
+1. Class for DOM_Reader
+	- get file
+	- parse file
+	- build tree

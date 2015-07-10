@@ -6,7 +6,7 @@ def parse_tag(tag)
   html = Hash.new
   #words = whole_line.each.scan(/\w+.*?/)
   tag = []
-  
+
   portions = (/^\s*([a-z]*)(.*)/i).match(whole_line)
 
   html[:tag_name] = portions[1]
@@ -38,6 +38,7 @@ Regex tried:
 1. /\w+.*?/   matches all words in a string
 2. /\sclass*?\W/ matches class
 3. /\s*(\w*?)\s*=/i    generic match for class, id, name ...
+4. (?<=(\"|\')).*?(?=(\"|\'))   look ahead and back to avoid quotes, but takes everything between quotes
 
 
 =end
