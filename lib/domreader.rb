@@ -13,7 +13,7 @@ class DomReader
 
 	def readfile
 		@text = []
-		file_lines = File.readlines("short.html")
+		file_lines = File.readlines("test.html")
 	 	file_lines.each do |lines|
 	 		@text << lines.strip
 	 	end
@@ -35,7 +35,7 @@ class DomReader
 	end
 
 	def parse_text_in_line(line)
-		unless line.include?("<")
+		if !line.include?("<")
 			line
 		else
 			result = line.match(/(?<=\>).*(?=(\<))/)    #checks on a line between >  and <
