@@ -1,5 +1,5 @@
 require 'pry'
-require_relative './lib/dom_tree.rb'
+require_relative './dom_tree.rb'
 
 # DomTree = Struct.new(:name,:text,:classes,:children, :parent)
 
@@ -8,12 +8,12 @@ class DomReader
 
 	def initialize
 		@tree = DomTree.new("root")
-		@stack = [@root]
+		# @stack = [@root]
 	end
 
 	def readfile
 		@text = []
-		file_lines = File.readlines("test.html")
+		file_lines = File.readlines("short.html")
 	 	file_lines.each do |lines|
 	 		@text << lines.strip
 	 	end
@@ -56,10 +56,12 @@ class DomReader
 			tag_id =  parse_id(line) || nil
 			text_in_line << parse_text_in_line(line) || ""
 			# create_tree(line, tag_name, tag_class, text_in_line)
-			if tag_name != nil
+			if !tag_name.nil? && !tag_name.include?("/")
 				@tree.opening_tag(tag_name, text_in_line[-1], tag_class, tag_id)
 			elsif check_if_closing_tag(line)
 				@tree.closing_tag(tag_name, text_in_line.pop)
+			else
+				@tree.insert_text(text_in_line.pop)
 			end
 			# @tree.check_open_or_close(tag_name, text_in_line.pop)
 		end

@@ -23,6 +23,10 @@ class DomTree
     stack.pop.text += pre_text
   end
 
+  def insert_text(text)
+    stack[-1].text += text
+  end
+
   def check_open_or_close(name, pre_text)
     opening_tag(name,pre_text) || closing_tag(name,pre_text)
   end
