@@ -16,3 +16,30 @@ Planning
 	- get file
 	- parse file
 	- build tree
+
+
+
+===========
+Biuld tree
+
+tag_stack = []
+
+hit a new opening tag, then
+1. create new tag node
+2. new_node.parent = stack[-1]
+3. stack[-1].children << new_node
+4. stack[-1].text << current text
+5. tag_stack << new tag
+
+
+...
+
+#stack = [body, top-div]  
+
+
+...
+
+hit a closing tag then 
+1. tag_stack.pop
+2. check any leftover text
+
