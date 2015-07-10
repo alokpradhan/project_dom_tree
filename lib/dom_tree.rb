@@ -2,8 +2,6 @@ Node = Struct.new(:name, :text, :classes, :id, :children, :parent)
 
 class DomTree
 
-  attr_reader :root
-
   def initialize(name="")
     @root = new_node(name)
     @stack = [@root]
@@ -30,6 +28,10 @@ class DomTree
 
   def check_open_or_close(name, pre_text)
     opening_tag(name,pre_text) || closing_tag(name,pre_text)
+  end
+
+  def root
+    @root.children[0]
   end
 
   private

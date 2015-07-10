@@ -9,7 +9,7 @@ class NodeRender
 	def render(node)
 		node ||= @tree.root
 		print "Children: "
-		node.children.each {|child| puts "#{child.name}"}
+		node.children.each {|child| print "#{child.name}     "}
 		puts "Contents: #{node.text}"
 		total_nodes(node)
 	end
