@@ -1,14 +1,11 @@
 require 'pry'
 require_relative './dom_tree.rb'
 
-# DomTree = Struct.new(:name,:text,:classes,:children, :parent)
-
 class DomReader
 	attr_reader :text, :root, :stack, :tree
 
 	def initialize
 		@tree = DomTree.new("root")
-		# @stack = [@root]
 	end
 
 	def readfile
@@ -50,9 +47,9 @@ class DomReader
 	def create_nodes
 		text_in_line = []
 		@text.each do |line|
-			tag_name = parse_tag_name(line) || nil
-			tag_class = parse_class(line) || nil
-			tag_id =  parse_id(line) || nil
+			tag_name = parse_tag_name(line)
+			tag_class = parse_class(line)
+			tag_id =  parse_id(line)
 			text_in_line << parse_text_in_line(line) || ""
 			if !tag_name.nil? && !tag_name.include?("/")
 				@tree.opening_tag(tag_name, text_in_line[-1], tag_class, tag_id)

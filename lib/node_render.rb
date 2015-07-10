@@ -10,7 +10,7 @@ class NodeRender
 		node ||= @tree.root
 		print "Children: "
 		node.children.each {|child| print "#{child.name}     "}
-		puts "Contents: #{node.text}"
+		puts "\nContents: #{node.text}"
 		total_nodes(node)
 	end
 
@@ -29,11 +29,4 @@ class NodeRender
 		puts "Node count: #{count_total_nodes}"
 		count_node_type.each {|name, occurrences| puts "#{name}: occurs #{occurrences} times"}
 	end
-
-	def count_node_type
-	end
-
-	def node_data
-	end
-
 end
