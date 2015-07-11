@@ -6,6 +6,8 @@ class DomReader
 
 	def initialize
 		@tree = DomTree.new("doctype")
+		readfile
+		create_nodes
 	end
 
 	def readfile
@@ -44,6 +46,10 @@ class DomReader
 		line.match(/<\//) != nil
 	end
 
+	def check_if_both_opening_closing(line)
+		!parse_tag_name(line).nil? && !parse_tag_name(line).include?("/") && check_if_closing_tag(line)
+	end
+
 	def create_nodes
 		text_in_line = []
 		@text.each do |line|
@@ -51,7 +57,10 @@ class DomReader
 			tag_class = parse_class(line)
 			tag_id =  parse_id(line)
 			text_in_line << parse_text_in_line(line) || ""
-			if !tag_name.nil? && !tag_name.include?("/")
+			if check_if_both_opening_closing(line)
+				@tree.opening_tag(tag_name, text_in_line[-1], tag_class, tag_id)
+				@tree.closing_tag(tag_name, "")
+			elsif !tag_name.nil? && !tag_name.include?("/")
 				@tree.opening_tag(tag_name, text_in_line[-1], tag_class, tag_id)
 			elsif check_if_closing_tag(line)
 				@tree.closing_tag(tag_name, text_in_line.pop)

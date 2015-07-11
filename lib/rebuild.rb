@@ -13,34 +13,64 @@ class Rebuild
 
 	def initialize(tree)
 		@tree = tree
+		@output = []
+		print
 	end
 
-	def depth_first_printing
-		stack = [[@tree.root, 0]]
-		render_io = []
-		#closing_tags = [@tree.root.name]
-		closing_tags = []
-		depth = 0
-		until stack.empty?
-			n, depth = stack.pop
-			render_io << combine_line(n)
-			closing_tags << n.name
-			render_io << "#{n.text}" if n != ""
-			n.children.reverse.each {|child| stack << [child, depth+1]}
-			if (n.children.empty? && !stack.empty?)#|| stack[-1][1] != n
-				(depth - stack[-1][1] + 1).times do
-					render_io << "</#{closing_tags.pop}>"
-				end
+	# def depth_first_printing
+	# 	stack = [[@tree.root, 0]]
+	# 	render_io = []
+	# 	#closing_tags = [@tree.root.name]
+	# 	# closing_tags = []
+	# 	# depth = 0
+	# 	until stack.empty?
+	# 		n, depth = stack.pop
+	# 		render_io << combine_line(n)
+	# 		# closing_tags << n.name
+	# 		render_io << "#{n.text}" if n != ""
+			
+	# 		if (n.children.empty? && !stack.empty?)
+	# 			cur = n
+	# 			(depth - stack[-1][1] + 1).times do
+	# 				render_io << "</#{cur.name}>"
+	# 				cur = cur.parent
+	# 			end
+	# 		end
+	# 		if (n.children.empty? && stack.empty?)
+	# 			cur = n
+	# 			while cur
+	# 			 	render_io << "</#{cur.name}>"
+	# 				cur = cur.parent
+	# 		 	end
+	# 		end
+	# 		n.children.reverse.each {|child| stack << [child, depth+1]}
+			
+	# # 	end
+	# 	# p closing_tags
+	# 	# until closing_tags.empty?
+	# 	# 	"</#{closing_tags.pop}>"
+	# 	# end
+	# 	render_io
+	# end
+
+	def print(n=@tree.root)
+		return if n.nil?
+		@output << combine_line(n)
+		@output << "#{n.text}" if n != ""
+		n.children.each do |child|
+			print(child)
+		end
+		@output << "</#{n.name}>"
+	end
+
+	def write_file
+		puts "write file"
+		File.open("output.html", "w") do |file|
+			@output.each do |line|
+				puts line
+				file.write line+"\n"
 			end
 		end
-		# p closing_tags
-		# until closing_tags.empty?
-		# 	"</#{closing_tags.pop}>"
-		# end
-		render_io
-	end
-
-	def indentation
 	end
 
 	def combine_line(node)
@@ -51,8 +81,8 @@ class Rebuild
 		output += ">"
 	end
 
-	def print
-		depth_first_printing.each {|line| puts line}
-	end
+	# def print
+	# 	depth_first_printing.each {|line| puts line}
+	# end
 
 end
