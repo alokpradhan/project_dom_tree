@@ -46,7 +46,7 @@ class Rebuild
 		output += " class = \"#{node.classes}\"" if node.classes
 		output += ">"
 	end
-		
+
 	# Iterative method
 	# def read_tree
 	# 	stack = [[@tree.root, 0]]
@@ -54,7 +54,7 @@ class Rebuild
 	# 	until stack.empty?
 	# 		n, depth = stack.pop
 	# 		render_io << combine_line(n)
-	# 		render_io << "#{n.text}" if n.text != ""			
+	# 		render_io << "#{n.text}" if n.text != ""
 	# 		if (n.children.empty? && !stack.empty?)
 	# 			cur = n
 	# 			(depth - stack[-1][1] + 1).times do
