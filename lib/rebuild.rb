@@ -14,7 +14,7 @@ class Rebuild
 	def initialize(tree)
 		@tree = tree
 		@output = []
-		print
+		print(@tree.root, "")
 	end
 
 	# def depth_first_printing
@@ -53,14 +53,14 @@ class Rebuild
 	# 	render_io
 	# end
 
-	def print(n=@tree.root)
+	def print(n=@tree.root, indent)
 		return if n.nil?
-		@output << combine_line(n)
-		@output << "#{n.text}" if n != ""
+		@output << indent + combine_line(n)
+		@output << (indent + "  " + "#{n.text}") if n.text != ""
 		n.children.each do |child|
-			print(child)
+			print(child, indent+"  ")
 		end
-		@output << "</#{n.name}>"
+		@output << indent + "</#{n.name}>"
 	end
 
 	def write_file
