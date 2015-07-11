@@ -14,6 +14,8 @@ class NodeRender
 		total_nodes(node)
 	end
 
+	private
+
 	def total_nodes(node)
 		queue = [node]
 		search_result = []

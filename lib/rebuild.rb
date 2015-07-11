@@ -14,21 +14,47 @@ class Rebuild
 	def initialize(tree)
 		@tree = tree
 		@output = []
-		print(@tree.root, "")
+		read_tree(@tree.root, "")
 	end
 
-	# def depth_first_printing
+	def write_file
+		puts "write file"
+		File.open("output.html", "w") do |file|
+			@output.each do |line|
+				puts line
+				file.write line+"\n"
+			end
+		end
+	end
+
+	private
+
+	def read_tree(n, indent)
+		return if n.nil?
+		@output << (indent + combine_line(n))
+		@output << (indent + "  " + "#{n.text}") if n.text != ""
+		n.children.each do |child|
+			print(child, indent+"  ")
+		end
+		@output << (indent + "</#{n.name}>")
+	end
+
+	def combine_line(node)
+		output = "<"
+		output += "#{node.name}" if node.name
+		output += " id = \"#{node.name}\"" if node.id
+		output += " class = \"#{node.classes}\"" if node.classes
+		output += ">"
+	end
+		
+	# Iterative method
+	# def read_tree
 	# 	stack = [[@tree.root, 0]]
 	# 	render_io = []
-	# 	#closing_tags = [@tree.root.name]
-	# 	# closing_tags = []
-	# 	# depth = 0
 	# 	until stack.empty?
 	# 		n, depth = stack.pop
 	# 		render_io << combine_line(n)
-	# 		# closing_tags << n.name
-	# 		render_io << "#{n.text}" if n != ""
-			
+	# 		render_io << "#{n.text}" if n.text != ""			
 	# 		if (n.children.empty? && !stack.empty?)
 	# 			cur = n
 	# 			(depth - stack[-1][1] + 1).times do
@@ -44,45 +70,7 @@ class Rebuild
 	# 		 	end
 	# 		end
 	# 		n.children.reverse.each {|child| stack << [child, depth+1]}
-			
-	# # 	end
-	# 	# p closing_tags
-	# 	# until closing_tags.empty?
-	# 	# 	"</#{closing_tags.pop}>"
-	# 	# end
 	# 	render_io
-	# end
-
-	def print(n=@tree.root, indent)
-		return if n.nil?
-		@output << indent + combine_line(n)
-		@output << (indent + "  " + "#{n.text}") if n.text != ""
-		n.children.each do |child|
-			print(child, indent+"  ")
-		end
-		@output << indent + "</#{n.name}>"
-	end
-
-	def write_file
-		puts "write file"
-		File.open("output.html", "w") do |file|
-			@output.each do |line|
-				puts line
-				file.write line+"\n"
-			end
-		end
-	end
-
-	def combine_line(node)
-		output = "<"
-		output += "#{node.name}" if node.name
-		output += " id = \"#{node.name}\"" if node.id
-		output += " class = \"#{node.classes}\"" if node.classes
-		output += ">"
-	end
-
-	# def print
-	# 	depth_first_printing.each {|line| puts line}
 	# end
 
 end

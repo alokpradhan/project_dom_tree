@@ -2,13 +2,15 @@ require 'pry'
 require_relative './dom_tree.rb'
 
 class DomReader
-	attr_reader :text, :root, :stack, :tree
+	attr_reader :tree
 
 	def initialize
 		@tree = DomTree.new("doctype")
 		readfile
-		create_nodes
+		build_tree
 	end
+
+	private
 
 	def readfile
 		@text = []
@@ -50,7 +52,7 @@ class DomReader
 		!parse_tag_name(line).nil? && !parse_tag_name(line).include?("/") && check_if_closing_tag(line)
 	end
 
-	def create_nodes
+	def build_tree
 		text_in_line = []
 		@text.each do |line|
 			tag_name = parse_tag_name(line)
@@ -70,9 +72,3 @@ class DomReader
 		end
 	end
 end
-
-a = DomReader.new
-a.readfile
-a.create_nodes
-p a.stack
-p @tree
